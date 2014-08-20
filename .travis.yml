@@ -1,0 +1,19 @@
+language: node_js
+node_js:
+- '0.10'
+jdk:
+- oraclejdk7
+before_install:
+- curl -O https://raw.githubusercontent.com/vschoettke/ci-oracle-integration/master/oracle_db_setup.sh
+- source ./oracle_db_setup.sh $SECRET test test
+- curl -O https://raw.githubusercontent.com/vschoettke/ci-oracle-integration/master/node_oracle_env.sh
+- source ./node_oracle_env.sh
+notifications:
+  email: false
+matrix:
+  allow_failures:
+  - node_js: '0.11'
+  fast_finish: true
+env:
+  global:
+    secure: J/Q36kLwjtwEeGPuA00Dh4U9SENx+P23DsL83l7III8gYhWTwUQJfqdZCAQVuuWUPUossENfQjNgxaG0E7aRxyS0HL52xnyW7Wfu4U1pPTp6rDbphVafDmPq9z0GlTWz/Gw7Ozpnbq+CJ0Te/+Z1Sllq54+QgLQ8qjs8lWD/Gsk=
