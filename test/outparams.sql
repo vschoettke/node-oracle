@@ -31,6 +31,13 @@ BEGIN
   outParam1 := 43;
 END;
 /
+CREATE OR REPLACE PROCEDURE procDateTimeOutParam(outParam1 OUT DATE, outParam2 OUT TIMESTAMP)
+IS
+BEGIN
+  outParam1 := SYSDATE;
+  outParam2 := SYSTIMESTAMP;
+END;
+/
 
 CREATE OR REPLACE PROCEDURE procTwoOutParams(param1 IN VARCHAR2, outParam1 OUT NUMBER, outParam2 OUT STRING)
 IS
