@@ -28,7 +28,7 @@ END;
 CREATE OR REPLACE PROCEDURE procFloatOutParam(param1 IN VARCHAR2, outParam1 OUT FLOAT)
 IS
 BEGIN
-  outParam1 := 43;
+  outParam1 := 43.5;
 END;
 /
 CREATE OR REPLACE PROCEDURE procDateTimeOutParam(outParam1 OUT DATE, outParam2 OUT TIMESTAMP)

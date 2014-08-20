@@ -175,8 +175,7 @@ exports['OutParamsTest'] = nodeunit.testCase({
     var self = this;
     self.connection.execute("call procFloatOutParam(:1,:2)", ["node", new oracle.OutParam(oracle.OCCIFLOAT)], function(err, results){
       if(err) { console.error(err); return; }
-      // purposely commented, gotta love floats in javasctipt: http://stackoverflow.com/questions/588004/is-javascripts-floating-point-math-broken
-      // test.equal(results.returnParam, 43);
+      test.equal(results.returnParam, 43.5);
 
       test.done();
     });
