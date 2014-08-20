@@ -1,4 +1,4 @@
-# Oracle driver for Node.js
+# Oracle driver for Node.js [![Build Status](https://travis-ci.org/vschoettke/node-oracle.svg?branch=master)](https://travis-ci.org/vschoettke/node-oracle)
 
 A driver to connect to an Oracle database from node.js, leveraging the "Oracle C++ Call Interface" (OCCI)
 for connectivity.  This is most commonly obtained as part of the Oracle Instant Client.
