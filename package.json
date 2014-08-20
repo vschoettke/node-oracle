@@ -34,7 +34,7 @@
     "nodeunit": "~>0.8.0"
   },
   "scripts": {
-    "test": "nodeunit test/integration.js test/outparams.js"
+    "test": "nodeunit test"
   },
   "main": "./index.js"
 }
