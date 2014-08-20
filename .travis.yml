@@ -8,6 +8,9 @@ before_install:
 - source ./oracle_db_setup.sh $SECRET test test
 - curl -O https://raw.githubusercontent.com/vschoettke/ci-oracle-integration/master/node_oracle_env.sh
 - source ./node_oracle_env.sh
+before_script:
+- cat test/integration.sql | sqlplus -S test/test@$CI_ORACLE_HOSTNAME:$CI_ORACLE_PORT/$CI_ORACLE_DB
+- cat test/outparams.sql | sqlplus -S test/test@$CI_ORACLE_HOSTNAME:$CI_ORACLE_PORT/$CI_ORACLE_DB
 notifications:
   email: false
 matrix:
