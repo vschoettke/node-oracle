@@ -205,6 +205,7 @@ int Connection::SetValuesOnStatement(oracle::occi::Statement* stmt, ExecuteBaton
   uint32_t index = 1;
   int outputParam = -1;
   OutParam * outParam = NULL;
+  arrayParam_t* arrParam;
   for (vector<value_t*>::iterator iterator = values.begin(), end = values.end(); iterator != end; ++iterator, index++) {
     value_t* val = *iterator;
     int outParamType;
@@ -221,6 +222,11 @@ int Connection::SetValuesOnStatement(oracle::occi::Statement* stmt, ExecuteBaton
         break;
       case VALUE_TYPE_TIMESTAMP:
         stmt->setTimestamp(index, *((oracle::occi::Timestamp*)val->value));
+        break;
+      case VALUE_TYPE_ARRAY:
+        stmt->setDatabaseNCHARParam(index, true);
+        arrParam = (arrayParam_t*)val->value;        
+        stmt->setDataBufferArray(index, arrParam->value, arrParam->elementsType, arrParam->collectionLength, &arrParam->collectionLength, arrParam->elementsSize, arrParam->elementLength, NULL, NULL);
         break;
       case VALUE_TYPE_OUTPUT:
         outParam = static_cast<OutParam*>(val->value);
@@ -668,7 +674,7 @@ Local<Object> Connection::CreateV8ObjectFromRow(ExecuteBaton* baton, vector<colu
             int totalBytesRead = 0;
             while (numBytesRead != -1) {
               totalBytesRead += numBytesRead;
-              columnVal.append(buffer);
+              columnVal.append(buffer, numBytesRead);
               numBytesRead = instream->readBuffer(buffer, chunkSize);
             }
 
@@ -699,7 +705,6 @@ Local<Object> Connection::CreateV8ObjectFromRow(ExecuteBaton* baton, vector<colu
             v8::Local<v8::Object> v8Buffer = bufferConstructor->NewInstance(3, constructorArgs);
             obj->Set(String::New(col->name.c_str()), v8Buffer);
             delete v;
-            delete[] buffer;
             break;
           }
           break;
@@ -802,7 +807,7 @@ failed:
       				int totalBytesRead = 0;
       				while (numBytesRead != -1) {
       					totalBytesRead += numBytesRead;
-      					clobVal.append(buffer);
+      					clobVal.append(buffer, numBytesRead);
       					numBytesRead = instream->readBuffer(buffer, chunkSize);
       				}
       				output->clobVal.closeStream(instream);
@@ -829,7 +834,6 @@ failed:
               v8::Handle<v8::Value> constructorArgs[3] = { uni::BufferToHandle(nodeBuff), v8::Integer::New(lobLength), v8::Integer::New(0) };
               v8::Local<v8::Object> v8Buffer = bufferConstructor->NewInstance(3, constructorArgs);
               obj->Set(String::New(returnParam.c_str()), v8Buffer);
-              delete [] buffer;
               break;
             }
           case OutParam::OCCIDATE:
